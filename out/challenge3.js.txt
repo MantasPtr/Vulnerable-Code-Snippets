@@ -1,0 +1,60 @@
+1. **Issue: Implicit Global Variable**
+   - **Description**: The variable `message` is not declared with `var`, `let`, or `const`, which makes it a global variable. This can lead to unexpected behavior if `message` is used elsewhere.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```javascript
+     message = document.getElementById("message").value;
+     ```
+
+2. **Issue: Potential Cross-Site Scripting (XSS)**
+   - **Description**: The function `get_domain()` constructs a domain from the URL which is then used in constructing `RECEIVE_URL`. If the URL can be manipulated, it might lead to XSS or other security vulnerabilities.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```javascript
+     const RECEIVE_URL = SERVER_DOMAIN + "/s_child.html" + "?origin=" + get_domain();
+     ```
+
+3. **Issue: Inconsistent Variable Declaration**
+   - **Description**: The variable `window_ref` is declared but never used, which leads to unnecessary code clutter.
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```javascript
+     var window_ref = null;
+     ```
+
+4. **Issue: Missing Error Handling**
+   - **Description**: There is no error handling in the `send_message` function. If the element with id `"message"` or `"s_iframe"` does not exist, it will throw an error.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```javascript
+     function send_message(destination) {
+         message = document.getElementById("message").value;
+         receiver.contentWindow.postMessage(message, SERVER_DOMAIN);
+     }
+     ```
+
+5. **Issue: Use of `var` instead of `let` or `const`**
+   - **Description**: The code uses `var` for declaring variables, which has function scope rather than block scope, potentially leading to bugs related to variable hoisting.
+   - **Severity Level**: Low
+   - **Line Number and Content**: Multiple lines, e.g.,
+     ```javascript
+     var receiver = document.getElementById("s_iframe");
+     ```
+
+6. **Issue: Hardcoded URL Path**
+   - **Description**: The URL path in `RECEIVE_URL` is hardcoded, which might not be flexible for different environments or future changes.
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```javascript
+     const RECEIVE_URL = SERVER_DOMAIN + "/s_child.html" + "?origin=" + get_domain();
+     ```
+
+7. **Issue: Potential Security Issue with `postMessage`**
+   - **Description**: The `postMessage` method is used without validation of the message being sent. This could lead to security vulnerabilities if the message content is not properly sanitized.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```javascript
+     receiver.contentWindow.postMessage(message, SERVER_DOMAIN);
+     ```
+
+These issues should be addressed to improve the security, maintainability, and performance of the code.

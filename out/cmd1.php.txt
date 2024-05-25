@@ -1,0 +1,30 @@
+1. **Security Issue: Remote Code Execution (RCE)**
+   - **Severity Level**: Critical
+   - **Line Number and Content**: 
+     - Line 8: `system($_GET["cmd"]);`
+   - **Description**: The use of `system()` with user-supplied input (`$_GET["cmd"]`) allows an attacker to execute arbitrary commands on the server. This can lead to unauthorized access, data leakage, and potentially taking control of the server.
+
+2. **Security Issue: Lack of Input Validation**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 8: `system($_GET["cmd"]);`
+   - **Description**: There is no validation or sanitization on the input received from the user. This exacerbates the risk of malicious input leading to severe security vulnerabilities such as the aforementioned RCE.
+
+3. **Code Style Issue: Inconsistent Indentation**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     - Line 1: `<?php     include("../common/header.php");   ?>`
+     - Line 8: `system($_GET["cmd"]);`
+   - **Description**: The code uses inconsistent spacing and indentation, which can make the code less readable and maintainable.
+
+4. **Security Issue: Use of Relative Path**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 1: `include("../common/header.php");`
+   - **Description**: Using relative paths in `include()` can lead to potential security risks if the directory structure is exposed or manipulated. It's safer to use absolute paths or to validate the path.
+
+**Recommendations**:
+- Immediately remove or properly secure the use of `system()` with user inputs.
+- Implement rigorous input validation and sanitization.
+- Standardize code formatting for better readability and maintenance.
+- Consider using absolute paths for file inclusions and validate paths to mitigate directory traversal attacks.

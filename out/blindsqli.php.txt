@@ -1,0 +1,36 @@
+1. **SQL Injection Vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 9: `$count = $db->querySingle('select count(*) from secrets where id = ' . $_GET['id']);`
+   - **Description**: The code directly includes user input (`$_GET['id']`) in an SQL query without any form of sanitization or parameterization. This can allow an attacker to manipulate the SQL query to access or modify data they shouldn't have access to, or perform other malicious actions against the database.
+
+2. **Improper Error Handling**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 5: `if (strlen($_GET['id']) < 1) {`
+   - **Description**: The code checks if the 'id' parameter is less than 1 character long but does not handle cases where the 'id' parameter is not set at all, which would generate a notice of undefined index. A better approach would be to check if the 'id' parameter is set and is not empty.
+
+3. **Direct Path Disclosure**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     - Line 3: `require_once('../_helpers/strip.php');`
+   - **Description**: Using relative paths in `require_once` can potentially expose the path structure of the server if there's an error in path resolution or file access. It's safer to use absolute paths derived from a server-controlled variable.
+
+4. **Database Connection Not Closed**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     - Not explicitly shown in a line but implied by the absence of a close connection command.
+   - **Description**: The script opens a database connection but does not explicitly close it. While PHP will typically clean up at script termination, explicitly closing the database connection can free up resources sooner and is considered good practice.
+
+5. **Lack of Input Validation**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 9: `$count = $db->querySingle('select count(*) from secrets where id = ' . $_GET['id']);`
+   - **Description**: Beyond the risk of SQL injection, there's no validation to ensure that the 'id' parameter is a valid integer or expected data type, which could lead to unexpected behavior or errors.
+
+To address these issues:
+- Use prepared statements or parameterized queries to prevent SQL injection.
+- Check if the 'id' parameter is set using `isset()` and ensure it is not empty.
+- Use absolute paths for file inclusions, possibly with a base path variable.
+- Explicitly close the database connection after its last use.
+- Validate and sanitize all user inputs to ensure they meet expected criteria.

@@ -1,0 +1,55 @@
+1. **Security Issue: SQL Injection**
+   - **Severity Level:** High
+   - **Line Number and Content:** 
+     - Line 4: `$opt=$_POST['opt'];`
+     - Line 5: `$lsid=$_POST['lsid'];`
+     - Line 6: `$sharetype=$_POST['lssharetype'];`
+     - Line 7: `$remoteaddress=$_POST['lsremoteaddress'];`
+     - Line 8: `$sharefolder=$_POST['lssharefolder'];`
+     - Line 9: `$user=$_POST['lsuser'];`
+     - Line 10: `$pass=$_POST['lspass'];`
+     - Line 11: `$domain=$_POST['lsdomain'];`
+   - **Description:** The variables are directly taken from `$_POST` without any sanitization or validation and are used in database operations. This can lead to SQL injection if the input is not properly sanitized before being used in SQL queries.
+
+2. **Security Issue: Command Injection**
+   - **Severity Level:** High
+   - **Line Number and Content:** 
+     - Line 36: `$output = shell_exec('sudo /opt/cryptolog/scripts/testmountpoint.sh '.$sharefolder);`
+   - **Description:** The variable `$sharefolder` is directly included in a shell command without any sanitization, which could lead to command injection if the input contains shell metacharacters or other malicious content.
+
+3. **Security Issue: Use of Deprecated MySQL Functions**
+   - **Severity Level:** High
+   - **Line Number and Content:** 
+     - Line 13: `$dbConn = mysql_connect(DB_HOST, DB_USER, DB_PASS);`
+     - Line 15: `mysql_select_db(DB_DATABASE, $dbConn) or die ("Out of service");`
+   - **Description:** The code uses `mysql_*` functions which are deprecated and removed in PHP 7.0. It is recommended to use `mysqli` or `PDO` for database operations.
+
+4. **Code Style Issue: Direct use of `die()`**
+   - **Severity Level:** Medium
+   - **Line Number and Content:** 
+     - Line 14: `if (!$dbConn) die ("Out of service");`
+     - Line 15: `mysql_select_db(DB_DATABASE, $dbConn) or die ("Out of service");`
+   - **Description:** Using `die()` for error handling is not recommended as it stops script execution abruptly. It is better to use exception handling or error handling mechanisms that allow for cleaner shutdown and logging.
+
+5. **Performance Issue: Repeated Database Connection**
+   - **Severity Level:** Medium
+   - **Line Number and Content:** 
+     - Line 13: `$dbConn = mysql_connect(DB_HOST, DB_USER, DB_PASS);`
+   - **Description:** The script connects to the database on every request. For better performance, especially under high load, consider using persistent connections or connection pooling.
+
+6. **Security Issue: Lack of Input Validation**
+   - **Severity Level:** High
+   - **Description:** There is no validation on the input received from the user. This can lead to various security issues like SQL Injection, XSS, etc., depending on how the input is used.
+
+7. **Security Issue: Hardcoded Path in Shell Command**
+   - **Severity Level:** Medium
+   - **Line Number and Content:** 
+     - Line 36: `$output = shell_exec('sudo /opt/cryptolog/scripts/testmountpoint.sh '.$sharefolder);`
+   - **Description:** Using hardcoded paths can lead to security risks if the directory permissions are not properly set or if the path is exposed to unauthorized changes.
+
+Recommendations:
+- Sanitize and validate all inputs.
+- Replace deprecated `mysql_*` functions with `mysqli` or `PDO`.
+- Implement proper error handling instead of using `die()`.
+- Consider security implications of using `shell_exec` and ensure inputs are sanitized.
+- Review and possibly refactor the database connection strategy for performance improvements.

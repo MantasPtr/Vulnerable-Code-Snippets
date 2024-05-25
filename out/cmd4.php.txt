@@ -1,0 +1,29 @@
+1. **Security Issue: Command Injection**
+   - **Severity Level**: Critical
+   - **Line Number**: 9
+   - **Content**: `system("whois " . $_POST["domain"]);`
+   - **Description**: The code directly includes user input (`$_POST["domain"]`) in a system command without any sanitization or validation. This can lead to command injection attacks where an attacker could execute arbitrary commands on the server.
+
+2. **Security Issue: Lack of Input Validation**
+   - **Severity Level**: High
+   - **Line Number**: 9
+   - **Content**: `system("whois " . $_POST["domain"]);`
+   - **Description**: There is no validation to check if the input is a valid domain name or if the input is empty. This could lead to unexpected behavior or errors when executing the `whois` command.
+
+3. **Code Style Issue: Inconsistent Indentation**
+   - **Severity Level**: Low
+   - **Line Number**: 1
+   - **Content**: `<?php     include("../common/header.php");   ?>`
+   - **Description**: The PHP opening tag and the include statement have inconsistent and excessive spacing. It's better to maintain consistent and conventional spacing for readability and maintainability.
+
+4. **Security Issue: Potential Exposure of Sensitive Files**
+   - **Severity Level**: Medium
+   - **Line Number**: 1
+   - **Content**: `<?php     include("../common/header.php");   ?>`
+   - **Description**: Using relative paths in include statements can potentially expose sensitive files if not properly managed, especially if directory traversal is not mitigated elsewhere in the application.
+
+To address these issues:
+- Sanitize and validate user inputs before using them in system commands.
+- Implement proper error handling for user inputs.
+- Use consistent coding styles for better readability.
+- Ensure secure handling of file paths and restrict access to sensitive files.

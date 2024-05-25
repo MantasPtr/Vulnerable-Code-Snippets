@@ -1,0 +1,52 @@
+1. **Use of `var` instead of `let` or `const`**
+   - **Description**: The use of `var` for declaring variables is generally discouraged in modern JavaScript due to its function-scoped behavior, which can lead to unexpected behaviors compared to the block-scoped `let` and `const`.
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     - Line 4: `var fs = require('fs');`
+     - Line 5: `var express = require('express');`
+     - Line 6: `var app = express();`
+
+2. **Synchronous File Reading in Resolver**
+   - **Description**: The resolver uses `fs.readFileSync` to read a file synchronously. This can block the Node.js event loop, especially under high load, leading to performance issues.
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     - Line 47: `result = fs.readFileSync(path)`
+
+3. **Global Variable Declaration without `var`, `let`, or `const`**
+   - **Description**: In the `readFile` function, `result` is assigned without declaring it with `var`, `let`, or `const`, making it an implicit global variable, which can lead to unexpected behavior and bugs.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     - Line 47: `result = fs.readFileSync(path)`
+
+4. **Potential Security Risk: Unrestricted File Path Access**
+   - **Description**: The resolver function directly uses a file path from user input (`args.path`) to read a file. This can lead to a security vulnerability known as a Path Traversal attack, where an attacker could access sensitive files outside of the intended directories.
+   - **Severity Level**: Critical
+   - **Line Number and Content**:
+     - Line 39: `const file = readFile(args.path).toString()`
+
+5. **Logging Sensitive Data**
+   - **Description**: The resolver logs the content of the file to the console. This could potentially include sensitive data, which should not be logged in a production environment.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     - Line 40: `console.log(file)`
+
+6. **Unused Express App**
+   - **Description**: The Express app is initialized but not used anywhere in the provided code. This is unnecessary and could be confusing.
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     - Line 6: `var app = express();`
+
+7. **Inconsistent Return Type in Resolver**
+   - **Description**: The resolver for `books` returns an array with a single book object where the title is set to the content of a file and the author is hardcoded. This does not align with the expected use of the `books` array and could lead to confusion or errors.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     - Line 41: `return [{title: file, author: "hello"}]`
+
+Recommendations:
+- Replace `var` with `let` or `const` for variable declarations.
+- Use asynchronous file reading methods like `fs.readFile` or `fs.promises.readFile`.
+- Ensure variables are declared properly with `let` or `const`.
+- Validate or sanitize the file path input to prevent Path Traversal attacks.
+- Avoid logging potentially sensitive data.
+- Remove or utilize the Express app if necessary.
+- Clarify and correct the logic in the resolver to match the intended functionality and data structure.

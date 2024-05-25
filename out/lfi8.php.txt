@@ -1,0 +1,41 @@
+1. **Security Issue: Local File Inclusion (LFI) Vulnerability**
+   - **Severity Level:** High
+   - **Line Number and Content:** 
+     ```php
+     echo file_get_contents($_POST['file']);
+     ```
+   - **Description:** The script directly uses user input from `$_POST['file']` to read files without proper validation or sanitization. This can allow an attacker to read sensitive files from the server or execute arbitrary files by manipulating the input.
+
+2. **Security Issue: Incomplete Validation**
+   - **Severity Level:** Medium
+   - **Line Number and Content:** 
+     ```php
+     if (substr($_POST['file'], -4, 4) != '.php')
+     ```
+   - **Description:** The validation checks only if the file extension is not '.php'. This is insufficient as it does not prevent the inclusion of other sensitive file types or system files. More comprehensive validation against a whitelist of allowed paths or file types should be implemented.
+
+3. **Code Style Issue: Inconsistent Indentation and Spacing**
+   - **Severity Level:** Low
+   - **Line Number and Content:** 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description:** The PHP opening tag and the `include` statement have inconsistent spacing. Proper formatting and consistent indentation improve code readability and maintainability.
+
+4. **Security Issue: Direct Output of `file_get_contents`**
+   - **Severity Level:** Medium
+   - **Line Number and Content:** 
+     ```php
+     echo file_get_contents($_POST['file']);
+     ```
+   - **Description:** Directly outputting the contents of a file without any escaping or encoding can lead to issues such as XSS (Cross-Site Scripting) if the file contains executable HTML/JavaScript code. It's safer to apply appropriate output encoding.
+
+5. **Code Style Issue: Use of Relative Path in `include`**
+   - **Severity Level:** Low
+   - **Line Number and Content:** 
+     ```php
+     include("../common/header.php");
+     ```
+   - **Description:** Using relative paths in `include` statements can lead to issues when the directory structure changes. It's recommended to use absolute paths, possibly leveraging predefined constants or variables that hold the base path of the application.
+
+To address these issues, consider implementing more robust input validation, using absolute paths, and ensuring output encoding.

@@ -1,0 +1,40 @@
+1. **Security Issue: Cross-Site Scripting (XSS)**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     Hi, <?= $_GET['name']; ?>
+     ```
+   - **Description**: The code directly outputs the `name` parameter from the query string without any sanitization or escaping. This can lead to Cross-Site Scripting (XSS) attacks where malicious scripts can be injected and executed in the browser of any user who visits the URL with a specially crafted `name` parameter.
+
+2. **Security Issue: Potential DOM-based XSS**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```javascript
+     script.src = someObject.url;
+     ```
+   - **Description**: The JavaScript code dynamically sets the source of a script element based on the `url` property of `someObject`. If `someObject.url` can be influenced by user input (e.g., URL parameters, document location, etc.), this could lead to DOM-based XSS attacks where malicious scripts are loaded and executed.
+
+3. **Code Style Issue: Lack of HTML and JavaScript code separation**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```html
+     <script>
+       window.onload = function(){
+         let someObject = window.someObject || {};
+         let script = document.createElement('script');
+         script.src = someObject.url;
+         document.body.appendChild(script);
+      };
+     </script>
+     ```
+   - **Description**: Embedding JavaScript directly within HTML can lead to maintenance issues and makes the code harder to manage. It is generally better practice to separate JavaScript into external files.
+
+4. **Performance Issue: Script Loading**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```javascript
+     document.body.appendChild(script);
+     ```
+   - **Description**: Appending scripts directly to the body without any asynchronous or deferred loading mechanism can block the browser's rendering path, leading to slower page load times. Using `async` or `defer` attributes in script tags can help improve loading performance.
+
+Each of these issues should be addressed to improve the security, maintainability, and performance of the code.

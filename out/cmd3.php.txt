@@ -1,0 +1,28 @@
+1. **Security Issue: Command Injection**
+   - **Severity Level**: Critical
+   - **Line Number and Content**: 
+     ```php
+     system("/usr/bin/whois " . $_GET["domain"]);
+     ```
+   - **Description**: The code directly includes user input (`$_GET["domain"]`) in a system command without any sanitization or validation. This can lead to command injection attacks where an attacker could execute arbitrary commands on the server.
+
+2. **Security Issue: Lack of Input Validation**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     system("/usr/bin/whois " . $_GET["domain"]);
+     ```
+   - **Description**: There is no validation to check if the `domain` parameter is set or not. This could lead to PHP notices or warnings which might reveal internal details about the server if error reporting is enabled.
+
+3. **Code Style Issue: Inconsistent Indentation**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description**: The PHP opening tag and the `include` statement have inconsistent and excessive spacing which makes the code less readable and clean.
+
+To address these issues:
+- For the command injection vulnerability, validate and sanitize the `domain` input. Consider using escapeshellarg() to ensure the input is safe to pass to the shell command.
+- Check if `$_GET["domain"]` is set before using it to avoid PHP notices.
+- Clean up the code formatting for better readability and maintainability.

@@ -1,0 +1,49 @@
+The provided code snippet has several issues related to security, performance, and code style:
+
+1. **SQL Injection Vulnerability**
+   - **Description**: The code directly interpolates parameters into the SQL query, which can lead to SQL injection attacks if the parameters are not properly sanitized.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```ruby
+     con.query 'UPDATE users set name = ' + params[:name] + ' where id = ' + params[:id]
+     ```
+
+2. **Database Connection Management**
+   - **Description**: The code creates a new database connection on each request to the `update` method and closes it at the end. This approach is inefficient and can exhaust database connections under high load.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```ruby
+     con = Mysql.new 'localhost', 'user', 'pwd'
+     con.close
+     ```
+
+3. **Hardcoded Database Credentials**
+   - **Description**: Database credentials are hardcoded directly in the source code. This practice is insecure as it exposes sensitive information in the codebase.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```ruby
+     con = Mysql.new 'localhost', 'user', 'pwd'
+     ```
+
+4. **Lack of Input Validation**
+   - **Description**: There is no validation on the inputs `params[:name]` and `params[:id]` before they are used in the SQL query. This can lead to unexpected behavior or errors if the inputs are not as expected.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```ruby
+     con.query 'UPDATE users set name = ' + params[:name] + ' where id = ' + params[:id]
+     ```
+
+5. **Use of Concatenation in SQL Queries**
+   - **Description**: Using string concatenation for SQL queries is prone to SQL injection and makes the code harder to read and maintain.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```ruby
+     con.query 'UPDATE users set name = ' + params[:name] + ' where id = ' + params[:id]
+     ```
+
+**Recommendations**:
+- Use parameterized queries or an ORM to safely handle SQL queries.
+- Manage database connections using a connection pool.
+- Store sensitive credentials in environment variables or secure vaults.
+- Validate and sanitize all inputs.
+- Avoid using string concatenation to build SQL queries; use safer alternatives like parameterized queries.

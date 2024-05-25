@@ -1,0 +1,44 @@
+1. **LDAP Injection Vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```vbscript
+     filter = "(uid=" + CStr(userName) + ")" ' searching for the user entry
+     ```
+   - **Description**: The code directly concatenates user input (`userName`) into the LDAP query without any sanitization or validation. This can lead to LDAP injection attacks where malicious input could manipulate the LDAP query to access unauthorized data.
+
+2. **Improper Comparison in Conditional Statement**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```vbscript
+     if( userName = "" ) then
+     ```
+   - **Description**: The code uses a single equals sign (`=`) which is an assignment operator in VBScript, not a comparison operator. This should be a double equals sign (`==`) for comparison, or simply `if userName = "" then` for VBScript.
+
+3. **Potential Reference Error After Loop**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```vbscript
+     Response.Write("<b>" + ldapObj.AttrType(i) +"</b>: " + ldapObj.AttrValue(i) + "<br>" )
+     ```
+   - **Description**: The variable `i` is used outside the loop where it was defined. After the loop, `i` will have a value equal to `ldapObj.AttrCount`, which might not be a valid index, potentially leading to an error when trying to access `ldapObj.AttrType(i)` and `ldapObj.AttrValue(i)`.
+
+4. **Hardcoded LDAP Server and DN**
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     ```vbscript
+     Const LDAP_SERVER = "ldap.example"
+     ldapObj.DN = "ou=people,dc=spilab,dc=com"
+     ```
+   - **Description**: The LDAP server and DN are hardcoded, which reduces flexibility and maintainability of the code. It's better to configure these values externally, for example, through configuration files or environment variables.
+
+5. **Lack of Error Handling**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: General observation throughout the script.
+   - **Description**: The script does not include any error handling for LDAP operations (e.g., connection failures, search failures). Implementing error handling would improve the robustness and user experience by providing feedback on what went wrong.
+
+6. **Security Issue: Output Encoding**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: General observation in all `Response.Write` usages.
+   - **Description**: The script outputs LDAP attribute values directly to the HTML without encoding, which could lead to Cross-Site Scripting (XSS) vulnerabilities if the attribute values contain executable code in the context of the web page.
+
+Each of these issues should be addressed to improve the security, reliability, and maintainability of the code.

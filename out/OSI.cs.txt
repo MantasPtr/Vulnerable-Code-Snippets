@@ -1,0 +1,8 @@
+1. **Description of the issue**: The code allows for arbitrary command execution through the `binFile` parameter. This is a classic example of an OS command injection vulnerability. By directly using user input (`binFile`) to set the `FileName` of a `Process` object without any validation or sanitization, an attacker can execute arbitrary system commands or binaries.
+
+2. **Severity level**: Critical
+
+3. **Line number and content**:
+   - Line 13: `p.StartInfo.FileName = binFile; // Noncompliant`
+
+To mitigate this issue, you should never directly use user input in such a sensitive context. Instead, validate or sanitize the input to ensure it does not contain malicious content. Additionally, consider using a whitelist of allowed commands or binaries, or handle commands in a way that does not directly involve user input.

@@ -1,0 +1,82 @@
+1. **Issue: Use of insecure file opening mode**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```c
+     fp = fopen(filename,"r");
+     ```
+   - **Description**: The file is opened in text mode ("r"), which can cause issues when reading binary data such as images. It should be opened in binary mode ("rb") to ensure that the data is read correctly across different platforms.
+
+2. **Issue: Potential Integer Overflow**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     ```c
+     int size1 = img.width + img.height;
+     ```
+   - **Description**: Adding `width` and `height` without checking for overflow can lead to an integer overflow, which might result in incorrect memory allocation size.
+
+3. **Issue: Lack of malloc success check**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     ```c
+     char* buff1=(char*)malloc(size1);
+     ```
+   - **Description**: There is no check to ensure that `malloc` successfully allocated memory. If `malloc` fails, subsequent operations on `buff1` will lead to undefined behavior.
+
+4. **Issue: Double free vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     ```c
+     free(buff1);
+     ```
+   - **Description**: `buff1` is freed twice under certain conditions (`if (size1/2==0)`), which can lead to memory corruption.
+
+5. **Issue: Use after free vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     ```c
+     buff1[0]='a';
+     ```
+   - **Description**: Modifying `buff1` after it has been freed can lead to undefined behavior and potential security vulnerabilities.
+
+6. **Issue: Potential Integer Underflow**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```c
+     int size2 = img.width - img.height + 100;
+     ```
+   - **Description**: Subtracting `height` from `width` without ensuring that `width` is greater than `height` can lead to integer underflow.
+
+7. **Issue: Out of Bounds Read and Write**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     ```c
+     char OOBR_stack = buff3[size3+100];
+     buff3[size3+100]='c';
+     char OOBR_heap = buff4[100];
+     buff4[100]='c';
+     ```
+   - **Description**: Accessing and modifying data beyond the allocated buffer (`buff3` and `buff4`) can lead to data corruption, crashes, or other security vulnerabilities.
+
+8. **Issue: Potential Memory Leak**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```c
+     buff4=0;
+     ```
+   - **Description**: Setting `buff4` to `0` without freeing it first can lead to a memory leak if `size3 > 10`.
+
+9. **Issue: Lack of return statement in non-void function**
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     ```c
+     int ProcessImage(char* filename){
+     ```
+   - **Description**: The function `ProcessImage` is declared to return an `int`, but does not have a return statement. This can lead to undefined behavior.
+
+10. **Issue: No validation of command line arguments**
+    - **Severity Level**: Medium
+    - **Line Number and Content**:
+      ```c
+      ProcessImage(argv[1]);
+      ```
+    - **Description**: There is no check to ensure that `argv[1]` is provided, which can lead to a segmentation fault if the program is run without command line arguments.

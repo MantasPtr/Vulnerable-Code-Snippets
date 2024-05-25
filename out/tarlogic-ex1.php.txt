@@ -1,0 +1,35 @@
+1. **Hardcoded Sensitive Information**
+   - **Severity**: High
+   - **Line 3**: `public $password = "InsanitY778!::d";`
+   - **Description**: The password is hardcoded into the source code, which is a severe security risk. If the source code is exposed, the password is immediately compromised.
+
+2. **Insecure Deserialization**
+   - **Severity**: Critical
+   - **Line 10**: `$test = unserialize($argv[1]);`
+   - **Description**: The use of `unserialize()` on user-controlled input can lead to PHP object injection vulnerabilities. An attacker could potentially exploit this to execute arbitrary code or escalate privileges.
+
+3. **Lack of Input Validation**
+   - **Severity**: High
+   - **Line 10**: `$test = unserialize($argv[1]);`
+   - **Description**: There is no validation on the input being deserialized. This makes the application vulnerable to malformed or malicious input leading to application errors or security vulnerabilities.
+
+4. **Improper Access Control**
+   - **Severity**: Medium
+   - **Line 12**: `$check = $test->role;`
+   - **Description**: The script checks for the role "ADMIN" to display sensitive information. However, since the object properties are public, an attacker could modify the role to "ADMIN" through object injection, bypassing the intended access control.
+
+5. **Exposure of Sensitive Information**
+   - **Severity**: Medium
+   - **Line 14**: `$flag = file_get_contents("secret.txt");`
+   - **Description**: The path to the sensitive file is hardcoded, which could help an attacker in targeting this file. Additionally, if there are errors in file handling, the path might be exposed.
+
+6. **Public Properties in Class**
+   - **Severity**: Low
+   - **Line 2-4**: `public $username = "X-C3LL";` etc.
+   - **Description**: Using public properties allows for modification from outside the class, which can lead to unintended behavior or security issues. It's better to use private properties with getter/setter methods if external access is necessary.
+
+**Recommendations**:
+- Avoid hardcoding sensitive information in the source code. Use environment variables or secure storage mechanisms.
+- Replace `unserialize()` with safer alternatives like JSON encoding/decoding if possible, or ensure that input is properly validated and sanitized.
+- Implement proper access control mechanisms that do not rely solely on object properties.
+- Use private properties in classes to encapsulate data and expose them through controlled methods if external access is needed.

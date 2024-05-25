@@ -1,0 +1,37 @@
+1. **Issue: SQL Injection Vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 20: `using (SqlCommand cmd = new SqlCommand("SELECT * FROM users WHERE userId = '" + id + "'"))`
+   - **Description**: The method `DoSqli` constructs an SQL query by directly concatenating the input `id` with the query string. This practice is vulnerable to SQL injection attacks, where an attacker could manipulate the `id` parameter to execute arbitrary SQL code.
+
+2. **Issue: Inefficient String Concatenation in a Loop**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 28: `res += reader["userName"];`
+   - **Description**: The use of `+=` for string concatenation inside a loop can lead to performance issues, especially with a large number of iterations. Each concatenation creates a new string object, which can be inefficient in terms of memory and processing time. It's better to use `StringBuilder` for such scenarios.
+
+3. **Issue: Potential Resource Leak**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 24: `SqlDataReader reader = cmd.ExecuteReader();`
+   - **Description**: The `SqlDataReader` object `reader` is not enclosed in a `using` statement, which means it is not guaranteed to be properly disposed of if an exception occurs before the method returns. This can lead to unmanaged resources not being released properly.
+
+4. **Issue: Hardcoded Connection String**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     - Line 19: `string conString = "I AM a connection String";`
+   - **Description**: The connection string is hardcoded within the method, which is not a good practice. It should ideally be retrieved from a configuration file or environment variable to enhance security and flexibility, allowing changes without needing to recompile the code.
+
+5. **Issue: Method Returns Sensitive Data**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 20-33: Entire `DoSqli` method
+   - **Description**: The method returns user names directly, which might include sensitive information. Depending on the context, exposing such information could be a privacy concern. Consider if this exposure is necessary or if additional measures (like authorization) are needed.
+
+6. **Issue: Lack of Input Validation**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 20: `using (SqlCommand cmd = new SqlCommand("SELECT * FROM users WHERE userId = '" + id + "'"))`
+   - **Description**: There is no validation on the `id` parameter. Malformed or unexpected input could lead to errors or security vulnerabilities (such as the SQL injection mentioned above). Input should be validated or sanitized before use.
+
+These issues should be addressed to ensure the security and efficiency of the code.

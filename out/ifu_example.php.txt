@@ -1,0 +1,29 @@
+1. **Security Issue: Unrestricted File Upload**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 6: `$target_path .= basename( $_FILES[ 'uploaded' ][ 'name' ] );`
+   - **Description**: The code directly uses the file name from the user input (`$_FILES['uploaded']['name']`) without any validation or sanitization. This can lead to various security issues, including uploading of malicious files or scripts that could be executed on the server, leading to server compromise or data leakage.
+
+2. **Security Issue: Path Traversal**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 6: `$target_path .= basename( $_FILES[ 'uploaded' ][ 'name' ] );`
+   - **Description**: By appending the basename of the uploaded file directly to a directory path, the application might be vulnerable to path traversal attacks if the basename is manipulated. Although `basename()` is used, which should mitigate directory traversal, the lack of checks for other dangerous characters or patterns (like null bytes) still poses a risk.
+
+3. **Code Style Issue: Undefined Variable `$html`**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     - Line 10: `$html .= '<pre>Your image was not uploaded.</pre>';`
+     - Line 14: `$html .= "<pre>{$target_path} succesfully uploaded!</pre>";`
+   - **Description**: The variable `$html` is used for appending HTML content but it is not defined or initialized before use. This might lead to notices or warnings in PHP depending on the error reporting level and could result in only partial content being displayed or logged.
+
+4. **Typographical Error in User Feedback**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     - Line 14: `$html .= "<pre>{$target_path} succesfully uploaded!</pre>";`
+   - **Description**: There is a spelling mistake in the user feedback message. The word "succesfully" should be corrected to "successfully".
+
+To address these issues:
+- Validate and sanitize the file names and types before processing uploads.
+- Initialize `$html` before appending to it.
+- Correct the spelling mistake in the user feedback message.

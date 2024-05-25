@@ -1,0 +1,37 @@
+1. **Issue: Variable Redefinition**
+   - **Severity Level:** High
+   - **Line Number and Content:** 
+     - Line 10: `string zipPath = "/home/us1/extract/files.zip";`
+     - Line 12: `string zipPath = Console.ReadLine();`
+   - **Description:** The variable `zipPath` is defined twice within the same scope, which will cause a compilation error. The initial hard-coded assignment is unnecessary and should be removed.
+
+2. **Issue: Potential Path Traversal Vulnerability**
+   - **Severity Level:** High
+   - **Line Number and Content:** 
+     - Line 18: `entry.ExtractToFile(Path.Combine(extractPath, entry.FullName));`
+   - **Description:** Directly using user input for file paths without validation or sanitization can lead to path traversal vulnerabilities. An attacker could potentially manipulate paths to overwrite critical files or access unauthorized directories.
+
+3. **Issue: Lack of Error Handling**
+   - **Severity Level:** Medium
+   - **Line Number and Content:** 
+     - Entire `using` block and `Console.ReadLine()` calls.
+   - **Description:** There is no error handling for scenarios such as the zip file not existing, the destination path not being writable, or invalid input paths. Implementing try-catch blocks would improve robustness and user experience.
+
+4. **Issue: Redundant Console Output**
+   - **Severity Level:** Low
+   - **Line Number and Content:** 
+     - Line 20: `Console.WriteLine(extractPath);`
+   - **Description:** The extraction path is printed inside the loop for each file extracted, which could lead to unnecessary console clutter. This line should be moved outside the loop if the intention is to confirm the extraction path once, or it should be more descriptive if needed for each file.
+
+5. **Issue: Inconsistent Indentation and Code Formatting**
+   - **Severity Level:** Low
+   - **Line Number and Content:** 
+     - Lines 14-23: The entire block inside the `using` statement.
+   - **Description:** The code block inside the `using` statement is not consistently indented, which affects readability. Proper indentation should be maintained for better code clarity.
+
+To resolve these issues:
+- Remove the initial definition of `zipPath`.
+- Validate or sanitize the input paths to prevent path traversal.
+- Implement error handling for file operations and input handling.
+- Adjust the console output to be more informative or less frequent.
+- Correct the indentation and formatting inconsistencies.

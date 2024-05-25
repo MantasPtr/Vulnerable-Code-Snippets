@@ -1,0 +1,46 @@
+1. **Security Issue: Lack of Input Validation**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```javascript
+     router.post('/download-url', (req, res) => {
+         downloadURL(req.body.url, () =>{
+             res.send('Done')
+         }) 
+     });
+     ```
+   - **Description**: The code does not validate the URL received from the client. This can lead to security vulnerabilities such as Server-Side Request Forgery (SSRF) where an attacker could potentially cause the server to make requests to unintended URLs, including internal services that should not be accessible.
+
+2. **Performance Issue: Uncontrolled Resource Consumption**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```javascript
+     request(opts)
+       .on('data', ()=>{})
+       .on('end', () => onend())
+       .on('error', (err) => console.log(err, 'controller.url.download.error'))
+     ```
+   - **Description**: The code makes an HTTP GET request to download data but does not handle the data stream properly. The empty handler for the 'data' event means that all data from the response will be buffered in memory until the request is completed, which can lead to high memory consumption if the response data is large.
+
+3. **Code Style Issue: Inconsistent Use of Arrow Functions**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```javascript
+     .on('end', () => onend())
+     ```
+   - **Description**: The code uses an unnecessary wrapper around the `onend` callback. It could be simplified by directly passing `onend` to the 'end' event listener, improving readability and slightly reducing overhead.
+
+4. **Potential Error Handling Issue**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```javascript
+     .on('error', (err) => console.log(err, 'controller.url.download.error'))
+     ```
+   - **Description**: The error handling in the event of a request failure only logs the error to the console. It does not notify the client of the failure, which could leave the client waiting indefinitely or not aware that an error occurred. Proper error handling should include sending an appropriate response back to the client.
+
+5. **Dependency Issue: Use of Deprecated Package**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```javascript
+     const request = require('request');
+     ```
+   - **Description**: The `request` library is deprecated as of February 2020. Using deprecated libraries can lead to security vulnerabilities and lack of support. It is recommended to use alternative libraries like `axios`, `fetch`, or `node-fetch` for making HTTP requests.

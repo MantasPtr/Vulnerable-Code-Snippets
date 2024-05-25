@@ -1,0 +1,10 @@
+The provided PHP code has a critical security issue:
+
+1. **Description of the issue**: The code uses the `system()` function to execute a command that it receives from a POST request without any validation or sanitization. This can lead to a Remote Code Execution (RCE) vulnerability, where an attacker can execute arbitrary commands on the server.
+   
+2. **Severity level**: Critical
+
+3. **Line number and content**:
+   - Line 8: `system($_POST["cmd"]);`
+
+To mitigate this issue, it is recommended to avoid directly passing user input to system commands. If the functionality is necessary, ensure that the input is strictly validated and sanitized, or use a safer alternative approach to achieve the required functionality.

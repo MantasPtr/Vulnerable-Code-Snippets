@@ -1,0 +1,23 @@
+1. **Security Issue: Command Injection**
+   - **Severity Level**: Critical
+   - **Line Number and Content**: 
+     ```python
+     os.system(request.remote_addr)
+     ```
+   - **Description**: The code uses `os.system()` to execute a command that includes the remote address of the request (`request.remote_addr`). This is highly insecure as it allows an attacker to execute arbitrary commands on the server by manipulating the source IP address of the HTTP request. This can lead to remote code execution (RCE).
+
+2. **Security Issue: Running Flask App in Debug Mode in Production**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```python
+     app.run(debug=True)
+     ```
+   - **Description**: Running a Flask application in debug mode (`debug=True`) in a production environment can expose sensitive information about the application, such as error messages and configuration details, which can be exploited by an attacker. It is recommended to turn off debug mode in production.
+
+3. **Code Style Issue: Commented Code**
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     ```python
+     # curl -X GET "http://localhost:5000/tainted7/touch%20HELLO"
+     ```
+   - **Description**: The commented-out curl command provides an example of how to interact with the endpoint but could be misleading or confusing in terms of code maintenance or understanding. It's better to provide such examples in documentation rather than in comments within the code.

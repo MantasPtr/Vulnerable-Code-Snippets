@@ -1,0 +1,21 @@
+1. **SQL Injection Vulnerability**
+   - **Description**: The code constructs SQL queries by directly appending user input (`username`) into the SQL string. This practice can lead to SQL injection attacks, where an attacker can manipulate the query to access unauthorized data or perform malicious actions on the database.
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     - Line 3: `String query = "SELECT secret FROM Users WHERE (username = '" + username + "' AND NOT role = 'admin')";`
+     - Line 6: `String query2 = String.format("SELECT secret FROM Users WHERE (username = '%s' AND NOT role = 'admin')", username);`
+
+2. **Use of Statement instead of PreparedStatement**
+   - **Description**: The code uses `Statement` for executing SQL queries. For better security and performance, especially when including user inputs in the query, it is recommended to use `PreparedStatement`. This not only helps in preventing SQL injection but also improves performance by pre-compiling the SQL statement.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     - Line 2: `Statement statement = connection.createStatement();`
+
+To resolve these issues, you should use `PreparedStatement` and parameterize the SQL query to safely include user inputs. Here is an example of how you can modify the code:
+
+```java
+String username = request.getParameter("username");
+PreparedStatement preparedStatement = connection.prepareStatement("SELECT secret FROM Users WHERE username = ? AND NOT role = 'admin'");
+preparedStatement.setString(1, username);
+ResultSet result = preparedStatement.executeQuery();
+```

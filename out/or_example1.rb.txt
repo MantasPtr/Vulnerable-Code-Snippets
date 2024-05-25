@@ -1,0 +1,14 @@
+1. **Issue: Security - Open Redirect Vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**: 2, `redirect_to(params.update(action:'main'))`
+   - **Description**: The method `redirect_to` is being used with `params.update(action:'main')`, which directly uses user input (from `params`). This can lead to an open redirect vulnerability if the `params` object contains other modifiable entries that are not properly validated or sanitized. An attacker could manipulate the URL parameters to redirect a user to a malicious site.
+
+2. **Issue: Code Style - Method Definition**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 1, `def legacy`
+   - **Description**: The method definition `def legacy` is missing parentheses. While this is syntactically correct in Ruby, it is a good practice to include empty parentheses `def legacy()` when defining methods without parameters for better readability and to clearly distinguish it from a variable.
+
+3. **Issue: Code Style - Indentation**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 2, `redirect_to(params.update(action:'main'))`
+   - **Description**: The code inside the method should be properly indented to improve readability. In Ruby, it is standard practice to indent the code inside methods by two spaces.

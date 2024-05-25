@@ -1,0 +1,31 @@
+1. **Security Issue: LDAP Injection**
+   - **Severity Level**: Critical
+   - **Line Number and Content**: Line 2: `$dn = $_GET['host'];`
+   - **Description**: The variable `$dn` is directly taken from user input through `$_GET['host']` and used in the LDAP query. This can lead to LDAP injection if the input is not properly sanitized or validated.
+
+2. **Security Issue: LDAP Injection**
+   - **Severity Level**: Critical
+   - **Line Number and Content**: Line 3: `$filter="(|(sn=$person*)(givenname=$person*))";`
+   - **Description**: The variable `$person` is used in the LDAP filter but is not defined in the provided code snippet. If `$person` is user-controlled and not properly sanitized, it could lead to LDAP injection vulnerabilities.
+
+3. **Logic Issue: Undefined Variable**
+   - **Severity Level**: High
+   - **Line Number and Content**: Line 3: `$filter="(|(sn=$person*)(givenname=$person*))";`
+   - **Description**: The variable `$person` is not defined anywhere in the code before its use. This will lead to a PHP notice about an undefined variable and potentially incorrect LDAP queries.
+
+4. **Logic Issue: Incorrect LDAP Search Parameters**
+   - **Severity Level**: High
+   - **Line Number and Content**: Line 5: `$sr=ldap_search($ds, $dn, $dn, $justthese);`
+   - **Description**: The third parameter of `ldap_search` should be the filter string, but `$dn` is provided instead of `$filter`. This is likely a typo or copy-paste error.
+
+5. **Security Issue: Potential Information Disclosure**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: Line 7: `echo $info["count"]." entries returned\n";`
+   - **Description**: Printing out LDAP query results directly can lead to information disclosure if sensitive data is included in the output. It's important to handle output data carefully, especially in a production environment.
+
+6. **Code Style Issue: Inconsistent String Delimiters**
+   - **Severity Level**: Low
+   - **Line Number and Content**: Line 7: `echo $info["count"]." entries returned\n";`
+   - **Description**: The code uses both single quotes and double quotes for strings. It's a good practice to maintain consistency in the use of string delimiters.
+
+To address these issues, ensure proper input validation and sanitization, correct the LDAP search parameters, and handle output data securely. Additionally, define all variables used in the code and maintain consistent coding styles.

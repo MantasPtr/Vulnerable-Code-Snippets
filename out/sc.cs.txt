@@ -1,0 +1,50 @@
+1. **Issue: Hardcoded sensitive information**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```csharp
+     string password = "p-" + RandomNumberGenerator.GetInt32(200000000, 2000000000);
+     ```
+   - **Description**: Storing sensitive information such as passwords directly within a cookie, even if randomized, is insecure. Cookies can be intercepted or manipulated if not properly secured, leading to potential security vulnerabilities.
+
+2. **Issue: Cookie security attributes not set**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```csharp
+     Cookie cookie = new Cookie("password",password);
+     ```
+   - **Description**: The cookie is missing essential security attributes such as `Secure` and `HttpOnly`. The `Secure` attribute ensures the cookie is sent only over HTTPS, preventing it from being transmitted over unsecured HTTP. The `HttpOnly` attribute prevents the cookie from being accessed via JavaScript, reducing the risk of cross-site scripting (XSS) attacks.
+
+3. **Issue: Ambiguous route template**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```csharp
+     [HttpGet("{response}")]
+     [HttpGet("{request}")]
+     ```
+   - **Description**: Both methods are decorated with `HttpGet` attributes that use ambiguous and potentially conflicting route templates. This can lead to unexpected behavior or routing conflicts where one route may shadow the other.
+
+4. **Issue: Empty domain in cookie**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```csharp
+     cookie.Domain = "";
+     ```
+   - **Description**: Setting the `Domain` property of the cookie to an empty string is generally not recommended unless explicitly needed. This can cause the cookie to be sent to any domain, which might not be the intended behavior.
+
+5. **Issue: Misuse of HTTP response and request objects**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```csharp
+     public void DoPost(HttpWebResponse response, HttpWebRequest request)
+     ```
+   - **Description**: Direct manipulation of `HttpWebResponse` and `HttpWebRequest` in controller actions is unconventional and not recommended in ASP.NET Core. Instead, use ASP.NET Core's abstraction (like `IActionResult`) to handle requests and responses. This approach is more testable, maintainable, and aligns with the framework's design.
+
+6. **Issue: Method naming and purpose clarity**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```csharp
+     public void Unsafe(HttpWebResponse response, HttpWebRequest request)
+     ```
+   - **Description**: The method name `Unsafe` is not descriptive of its functionality. It's a good practice to use meaningful names that clearly indicate what the method does. Additionally, the method's implementation details suggest it should be private if it's not intended to be exposed externally.
+
+These issues should be addressed to improve the security and maintainability of the code.

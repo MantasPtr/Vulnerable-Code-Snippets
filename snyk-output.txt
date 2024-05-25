@@ -1,0 +1,1 @@
+snyk code test --org=117af860-1cd2-4736-a1d2-dbd26c1a246c --detection-depth=6

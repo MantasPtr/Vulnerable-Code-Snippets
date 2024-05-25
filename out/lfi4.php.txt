@@ -1,0 +1,36 @@
+1. **Issue: Local File Inclusion (LFI) Vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     include('includes/class_'.addslashes($_GET['class']).'.php');
+     ```
+   - **Description**: The code is vulnerable to a Local File Inclusion attack because it dynamically includes files based on user input. Although `addslashes()` is used, it is not sufficient to prevent LFI attacks. An attacker could potentially include arbitrary files from the server, leading to information disclosure or remote code execution.
+
+2. **Issue: Lack of Input Validation**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     <input type="text" name="class">
+     ```
+   - **Description**: The input from the user is directly used in the file inclusion without proper validation. This makes the application vulnerable to LFI as mentioned above. It's recommended to validate and sanitize all user inputs, especially when used in file paths or included files.
+
+3. **Issue: Missing Input Sanitization**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     include('includes/class_'.addslashes($_GET['class']).'.php');
+     ```
+   - **Description**: The use of `addslashes()` is not an appropriate method for sanitizing input for file inclusion. A more secure approach would be to whitelist expected input values or to map user inputs to a set of predefined file paths.
+
+4. **Issue: Insecure File Path Construction**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     include('includes/class_'.addslashes($_GET['class']).'.php');
+     ```
+   - **Description**: Constructing file paths directly from user input can lead to directory traversal or other types of file inclusion attacks. It's safer to avoid directly appending user inputs to file paths.
+
+**Recommendations**:
+- Validate and sanitize the 'class' parameter rigorously or use a mapping approach to handle user inputs.
+- Consider using functions like `basename()` to handle filenames, ensuring that only the filename part is used, not any directory paths.
+- Implement a whitelist of allowable files to be included based on the user input to prevent unauthorized file access.

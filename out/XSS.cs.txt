@@ -1,0 +1,41 @@
+1. **Description of the issue**: The method `xss` directly includes user input (`userInfo`) in the HTTP response without any sanitization or encoding. This can lead to Cross-Site Scripting (XSS) vulnerabilities where an attacker could inject malicious scripts that are executed in the browser of any user viewing the content.
+   
+   **Severity level**: High
+   
+   **Line number and content**: 
+   ```csharp
+   await context.Response.WriteAsync("<body>"+ userInfo +"</body>");
+   ```
+
+2. **Description of the issue**: The method `xss` is marked as `async` but returns `void` instead of `Task`. This can lead to issues where exceptions thrown in the method are not properly handled, and the caller cannot await the method, potentially leading to unhandled exceptions and issues with the control flow in asynchronous code.
+
+   **Severity level**: Medium
+   
+   **Line number and content**:
+   ```csharp
+   public async void xss(string userInfo)
+   ```
+
+3. **Description of the issue**: The method `xss` lacks any HTTP method attribute (like `[HttpGet]`, `[HttpPost]`), which specifies how the method should be accessed. This can lead to confusion or incorrect routing behavior.
+
+   **Severity level**: Low
+   
+   **Line number and content**:
+   ```csharp
+   public async void xss(string userInfo)
+   ```
+
+4. **Description of the issue**: The method name `xss` is not descriptive and does not follow common naming conventions for C# methods, which typically use PascalCase. Additionally, the name `xss` might misleadingly suggest that the method is intended to handle or produce XSS, which is not a desirable implication.
+
+   **Severity level**: Low
+   
+   **Line number and content**:
+   ```csharp
+   public async void xss(string userInfo)
+   ```
+
+To address these issues:
+- Sanitize or encode user inputs before including them in the output.
+- Change the return type of the `xss` method from `void` to `Task`.
+- Add an appropriate HTTP method attribute to the `xss` method.
+- Rename the method to follow PascalCase and provide a more descriptive name.

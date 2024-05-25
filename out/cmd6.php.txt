@@ -1,0 +1,37 @@
+1. **Security Issue: Command Injection**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     system("whois -h " . $_POST["server"] . " " . $_POST["domain"]);
+     ```
+   - **Description**: The use of `system()` with unsanitized user input (`$_POST["server"]` and `$_POST["domain"]`) allows for potential command injection. An attacker could manipulate the input to execute arbitrary commands on the server.
+
+2. **Security Issue: Insecure Data Handling**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     <input type="hidden" name="server" value="whois.publicinterestregistry.net">
+     ```
+   - **Description**: The hidden form field "server" can be manipulated by an attacker to change the server to which the WHOIS query is sent. This could be used to send potentially harmful queries to unintended servers or to exfiltrate data.
+
+3. **Code Style Issue: Direct use of superglobals**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```php
+     if (preg_match('/^[-a-z0-9]+\.a[cdefgilmnoqrstuwxz]|b[abdefghijmnorstvwyz]|c[acdfghiklmnoruvxyz]|d[ejkmoz]|e[cegrstu]|f[ijkmor]|g[abdefghilmnpqrstuwy]|h[kmnrtu]|i[delmnoqrst]|j[emop]|k[eghimnprwyz]|l[abcikrstuvy]|m[acdeghklmnopqrstuvwxyz]|n[acefgilopruz]|om|p[aefghklmnrstwy]|qa|r[eosuw]|s[abcdeghijklmnortuvyz]|t[cdfghjklmnoprtvwz]|u[agksyz]|v[aceginu]|w[fs]|y[et]|z[amw]|biz|cat|com|edu|gov|int|mil|net|org|pro|tel|aero|arpa|asia|coop|info|jobs|mobi|name|museum|travel|arpa|xn--[a-z0-9]+$/', strtolower($_POST["domain"])))
+     ```
+   - **Description**: Directly accessing `$_POST` variables without validation or sanitization can lead to security vulnerabilities and makes the code harder to maintain or test.
+
+4. **Logic Issue: Regex Complexity and Maintenance**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     if (preg_match('/^[-a-z0-9]+\.a[cdefgilmnoqrstuwxz]|b[abdefghijmnorstvwyz]|c[acdfghiklmnoruvxyz]|d[ejkmoz]|e[cegrstu]|f[ijkmor]|g[abdefghilmnpqrstuwy]|h[kmnrtu]|i[delmnoqrst]|j[emop]|k[eghimnprwyz]|l[abcikrstuvy]|m[acdeghklmnopqrstuvwxyz]|n[acefgilopruz]|om|p[aefghklmnrstwy]|qa|r[eosuw]|s[abcdeghijklmnortuvyz]|t[cdfghjklmnoprtvwz]|u[agksyz]|v[aceginu]|w[fs]|y[et]|z[amw]|biz|cat|com|edu|gov|int|mil|net|org|pro|tel|aero|arpa|asia|coop|info|jobs|mobi|name|museum|travel|arpa|xn--[a-z0-9]+$/', strtolower($_POST["domain"]))
+     ```
+   - **Description**: The regular expression used for validating domain names is overly complex and hard to maintain. It might also not cover all valid TLDs or be future-proof as new TLDs are introduced.
+
+**Recommendations**:
+- Sanitize and validate all user inputs to avoid command injection.
+- Avoid using hidden fields for critical data that should not be altered by the client.
+- Use a more maintainable method for validating domain names, possibly by using a well-maintained library.
+- Consider using functions or methods to abstract direct superglobal access, improving code maintainability and testability.

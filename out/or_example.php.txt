@@ -1,0 +1,8 @@
+1. **Description of the issue**: The code uses unvalidated and unsanitized user input directly in the `header` function, which can lead to open redirection vulnerabilities. This occurs when a user is redirected to a URL from the `$_GET["go"]` parameter without any validation or sanitization. Open redirection can be used in phishing attacks to redirect users to malicious websites, making it appear that the redirection is coming from a trusted site.
+
+2. **Severity level**: High
+
+3. **Line number and the content of the problematic line**:
+   - Line 1: `<?php header("Location: ".$_GET["go"]); die();  ?>`
+
+To mitigate this issue, ensure that the URL provided in the `$_GET["go"]` parameter is validated to be a trusted URL or sanitized to prevent malicious use. Additionally, consider implementing a whitelist of allowed URLs to further secure the redirection process.

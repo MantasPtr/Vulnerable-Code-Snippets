@@ -1,0 +1,29 @@
+1. **Security Issue: Local File Inclusion (LFI) Vulnerability**
+   - **Severity Level:** High
+   - **Line Number and Content:** 
+     ```php
+     include("pages/$file");
+     ```
+   - **Description:** The script includes files based on user input, which is only partially sanitized by removing '../'. This does not prevent an attacker from including files from other directories or even system files if they can guess or determine the path. This could lead to unauthorized disclosure of sensitive information, execution of server-side scripts, or other malicious activities.
+
+2. **Logic Issue: Improper Check for POST Variable**
+   - **Severity Level:** Medium
+   - **Line Number and Content:** 
+     ```php
+     $file = str_replace('../', '', $_POST['file']);
+     if(isset($file))
+     ```
+   - **Description:** The `isset()` function is used incorrectly to check if `$file` is set. Since `$file` is always set after the assignment (even if `$_POST['file']` is not set, `$file` will be initialized as an empty string), the check does not effectively determine if the `file` POST variable was provided by the user. This could lead to unintended behavior, such as attempting to include an empty or default page unintentionally.
+
+3. **Code Style Issue: Inconsistent Indentation and Spacing**
+   - **Severity Level:** Low
+   - **Line Number and Content:** 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description:** The PHP opening tag and the `include` statement have inconsistent spacing. Proper and consistent indentation and spacing improve code readability and maintainability.
+
+**Recommendations:**
+- To mitigate the LFI vulnerability, validate the `$file` variable against a list of allowed pages or ensure it only contains characters that are safe for filenames (e.g., alphanumeric characters), and do not allow path traversal characters or sequences.
+- Use `isset($_POST['file'])` to check if the `file` POST variable is actually set before processing it.
+- Clean up the code formatting by using consistent spacing and indentation.

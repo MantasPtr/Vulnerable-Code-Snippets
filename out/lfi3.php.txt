@@ -1,0 +1,37 @@
+1. **Security Issue: Local File Inclusion (LFI) Vulnerability**
+   - **Severity Level:** High
+   - **Line Number and Content:** 
+     ```php
+     echo file_get_contents($_GET['file']);
+     ```
+   - **Description:** The script directly uses the `$_GET['file']` parameter in the `file_get_contents` function without sufficient validation or sanitization. This can allow an attacker to read arbitrary files from the server by manipulating the `file` parameter in the URL, potentially leading to disclosure of sensitive information or server compromise.
+
+2. **Security Issue: Insufficient Validation**
+   - **Severity Level:** Medium
+   - **Line Number and Content:** 
+     ```php
+     if (substr($_GET['file'], -4, 4) != '.php')
+     ```
+   - **Description:** The validation checks only if the file extension is not '.php'. This is insufficient as it does not prevent an attacker from accessing other sensitive file types or using techniques like adding URL-encoded characters or using dot-dot-slash (../) sequences to traverse directories.
+
+3. **Code Style Issue: Inconsistent Indentation and Spacing**
+   - **Severity Level:** Low
+   - **Line Number and Content:** 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description:** The PHP opening tag and the `include` statement have inconsistent spacing. Proper and consistent indentation and spacing improve code readability and maintainability.
+
+4. **Code Style Issue: Direct Output in Conditional Statement**
+   - **Severity Level:** Low
+   - **Line Number and Content:** 
+     ```php
+     echo 'You are not allowed to see source files!'."\n";
+     ```
+   - **Description:** Directly echoing from within a conditional statement can be considered poor practice in terms of code readability and maintainability. It's generally better to handle output separately from logic processing.
+
+**Recommendations:**
+- Implement thorough input validation and sanitization to prevent LFI and other types of injection attacks.
+- Consider using a whitelist of allowed files or a different method for file handling that does not directly expose file paths to user input.
+- Improve code formatting for better readability and maintainability.
+- Separate logic from presentation to enhance code clarity.

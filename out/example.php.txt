@@ -1,0 +1,15 @@
+1. **Issue: Lack of Input Sanitization and Output Escaping**
+   - **Description**: The `name` variable retrieved from the `$_GET` superglobal is directly used in the output without any sanitization or escaping. This can lead to a reflected Cross-Site Scripting (XSS) vulnerability where malicious scripts can be executed in the browser of anyone who clicks a link containing harmful input.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     echo 'Hello, ' . $_GET['name']
+     ```
+
+2. **Issue: Missing Semicolon**
+   - **Description**: The line where the `echo` statement is used is missing a semicolon at the end. This is a syntax error and will cause the script to fail.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```php
+     echo 'Hello, ' . $_GET['name']
+     ```

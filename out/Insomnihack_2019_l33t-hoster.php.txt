@@ -1,0 +1,54 @@
+1. **Security Issue: Directory Traversal**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     $userdir = "images/{$_SESSION["home"]}/";
+     ```
+   - **Description**: The `$userdir` is constructed using session data which is user-controlled. This can potentially be manipulated to access or modify files outside of the intended directory. Although `bin2hex(random_bytes(20))` is used to generate the session directory name, ensuring that the directory name is not directly controlled by user input, the overall pattern could be risky if not properly handled in all scenarios.
+
+2. **Security Issue: Error Message Information Leakage**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     die("yuuuge fail");
+     die("lol filename is empty");
+     die("lol nice try, but im not stupid dude...");
+     die("why would you need php in a pic.....");
+     die("not an image.");
+     die("lol noob, your pic is not l33t enough");
+     ```
+   - **Description**: The error messages provided are too descriptive and could potentially help an attacker gain insight into the system or its security mechanisms. It's better to use generic error messages.
+
+3. **Security Issue: Unrestricted File Upload**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     move_uploaded_file($tmp_name, $userdir . $name . "." . $ext);
+     ```
+   - **Description**: Even though there is a check for disallowed extensions and a content check for PHP tags, the implementation might still be vulnerable to certain types of files that can be executed by the server (e.g., `.htaccess` manipulation, double extensions, etc.). More comprehensive validation and sanitization of file names and content are recommended.
+
+4. **Performance Issue: Inefficient File Handling**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     $image = file_get_contents($tmp_name);
+     ```
+   - **Description**: Reading the entire file into memory just to check if it contains PHP tags is inefficient, especially for large files. It would be more efficient to check for file content types or use other security measures to prevent code execution.
+
+5. **Code Style Issue: Inconsistent Error Handling**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```php
+     die("yuuuge fail");
+     ```
+   - **Description**: The script uses `die()` for error handling, which is abrupt and not user-friendly. It would be better to handle errors in a way that doesn't completely terminate script execution abruptly, perhaps by redirecting the user or displaying a friendly error message.
+
+6. **Security Issue: Potential XSS Vulnerability**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     echo "<li><a href='$file'>$file</a></li>";
+     ```
+   - **Description**: The file names are directly echoed into HTML without proper escaping, which could lead to Cross-Site Scripting (XSS) if a file name contains executable JavaScript code. Properly escaping output data is crucial to prevent XSS.
+
+These issues should be addressed to ensure the security and robustness of the application.

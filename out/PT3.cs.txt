@@ -1,0 +1,22 @@
+1. **Issue: Path Traversal Vulnerability**
+   - **Description**: The method `Test` directly concatenates user input (`userInput`) with a root folder path to create a file path. This can lead to a path traversal attack where an attacker could manipulate `userInput` to access or modify files outside of the intended directory.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 12: `using (var outputFile = new StreamWriter(RootFolder + userInput))`
+
+2. **Issue: Lack of Input Validation**
+   - **Description**: There is no validation on the `userInput` parameter. Besides the security implications, this could lead to runtime errors or unexpected behavior if the input is not a valid filename or includes characters that are not allowed in file paths.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 9: `public void Test(string userInput)`
+
+3. **Issue: Hardcoded File Path**
+   - **Description**: The root folder path is hardcoded, which reduces flexibility and can cause issues in different environments where the path might not exist or permissions are different.
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     - Line 7: `private const string RootFolder = @"C:\Temp\Data\";`
+
+To mitigate these issues:
+- Sanitize and validate `userInput` to ensure it does not contain path traversal characters or sequences.
+- Consider using a more dynamic method of determining the root folder path, possibly from configuration.
+- Implement error handling for file operations to manage exceptions that could arise from invalid file paths.

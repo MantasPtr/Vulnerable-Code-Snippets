@@ -1,0 +1,35 @@
+1. **SQL Injection Vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     - Line 17: `sql : "SELECT * FROM users WHERE id=" + userId`
+     - Line 22: `connection.query("SELECT * FROM users WHERE id=" + userId,(err, result) => {`
+     - Line 28: `sql : "SELECT * FROM users WHERE id=" +userId`
+   - **Description**: The code directly concatenates user input (`userId`) into SQL queries. This practice is vulnerable to SQL injection attacks, where an attacker could manipulate the query to access or manipulate data.
+
+2. **Improper Error Handling**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     - Line 19: `connection.query(query,(err, result) => {`
+     - Line 23: `connection.query("SELECT * FROM users WHERE id=" + userId,(err, result) => {`
+     - Line 29: `connection.query({`
+   - **Description**: The error object (`err`) returned by the `connection.query` function is not checked or handled. If an error occurs during the database query, it will not be logged or communicated to the client, potentially leading to uninformative responses and difficulties in debugging.
+
+3. **Use of `let` for Immutable Data**
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     - Line 16: `let userId = req.params.id;`
+     - Line 21: `let userId = req.params.id;`
+     - Line 27: `let userId = req.params.id;`
+   - **Description**: The variable `userId` is declared with `let` but is never reassigned. It is a good practice to use `const` for variables that do not change to communicate intent and prevent accidental reassignment.
+
+4. **Consistency in Query Construction**
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     - Line 17, 22, 28: Various lines constructing SQL queries.
+   - **Description**: The SQL queries are constructed in different styles across the routes. It is a good practice to maintain consistency in how queries are constructed and executed to improve code readability and maintainability.
+
+**Recommendations**:
+- To prevent SQL injection, use parameterized queries or prepared statements instead of concatenating strings directly into queries.
+- Implement error handling for database operations to manage and log errors appropriately.
+- Use `const` for variables that are not reassigned after their initial assignment.
+- Standardize the method of constructing and executing SQL queries across the application.

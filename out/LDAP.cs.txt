@@ -1,0 +1,28 @@
+1. **Issue: LDAP Injection Vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```csharp
+     searcher.Filter = "(&(objectClass=user)(|(cn=" + user + ")(sAMAccountName=" + user + ")))";
+     ```
+   - **Description**: The code directly concatenates user input into the LDAP query filter. This can lead to LDAP injection attacks where malicious input could potentially manipulate the LDAP query to unauthorizedly access or modify data in the LDAP directory.
+
+2. **Issue: Method Does Not Return Any Response**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```csharp
+     public void LdapInje(string user)
+     ```
+   - **Description**: The method `LdapInje` is a public HTTP GET endpoint that does not return any value or status code. This can confuse the client about the result of the operation, as there is no HTTP response indicating success, failure, or any other status.
+
+3. **Issue: Potential Resource Leak**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```csharp
+     DirectoryEntry de = new DirectoryEntry("LDAP://DC=mycompany,DC=com");
+     ```
+   - **Description**: The `DirectoryEntry` object `de` is instantiated but not disposed of, which can lead to resource leaks. `DirectoryEntry` implements `IDisposable`, so it should be properly disposed of, preferably using a `using` statement.
+
+**Recommendations**:
+- To prevent LDAP injection, sanitize and validate all user inputs. Consider using parameterized queries or input validation frameworks.
+- Modify the method to return an appropriate HTTP status code or result.
+- Use a `using` statement for `DirectoryEntry` and `DirectorySearcher` to ensure resources are properly released.

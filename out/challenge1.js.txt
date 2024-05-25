@@ -1,0 +1,58 @@
+1. **Security Issue: Cross-Site Scripting (XSS)**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     ```javascript
+     welcome.innerHTML = "Welcome " + html_encode (username);
+     ```
+   - **Description**: Although `html_encode` is intended to sanitize the username to prevent XSS, the function implementation is incorrect. It uses `document.createTextNode(html)` which does not actually encode HTML entities. This could allow an attacker to inject malicious scripts if they can control the username input.
+
+2. **Security Issue: Insecure PostMessage Usage**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     ```javascript
+     window_ref.postMessage(message, "*");
+     ```
+   - **Description**: The `postMessage` method is used with a target origin of `"*"`, which means it will accept messages from any origin. This is insecure as it should be restricted to specific domains to prevent data leakage or other cross-origin attacks.
+
+3. **Code Style Issue: Inconsistent Variable Declaration**
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     ```javascript
+     var username;
+     var username_obj;
+     var welcome;
+     var set_username;
+     var game;
+     var guess_obj;
+     var guess;
+     var res;
+     ```
+   - **Description**: The code inconsistently declares variables, sometimes using multiple `var` statements and sometimes combining them. It's better to use a single `var`, `let`, or `const` statement for readability and maintainability.
+
+4. **Performance Issue: Unnecessary DOM Access**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```javascript
+     document.getElementById("guess").focus();
+     document.getElementById("guess").value = "";
+     ```
+   - **Description**: The code accesses the DOM multiple times for the same element within the same function. It's more efficient to store the element in a variable and reuse it.
+
+5. **Logic Issue: Potential Null Reference**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```javascript
+     const usernameButton = document.getElementById("setUsername");
+     const guessButton = document.getElementById("checkGuess");
+     ```
+   - **Description**: The code does not check if `usernameButton` or `guessButton` is null before adding event listeners. If these elements do not exist in the DOM, this will cause a runtime error.
+
+6. **Security Issue: Potential Information Disclosure**
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```javascript
+     const RECEIVE_URL = SERVER_DOMAIN + "/challenge_scoreboard.html" + "?origin=" + get_domain();
+     ```
+   - **Description**: Appending the origin to the URL can potentially leak information about the client environment. This should be handled in a more secure manner, possibly server-side or through secure headers.
+
+These issues should be addressed to improve the security, performance, and maintainability of the code.

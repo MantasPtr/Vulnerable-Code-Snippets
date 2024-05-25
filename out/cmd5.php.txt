@@ -1,0 +1,37 @@
+1. **Security Issue: Command Injection**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     system("whois -h " . $_GET["server"] . " " . $_GET["domain"]);
+     ```
+   - **Description**: The use of `system()` with parameters directly taken from user input (`$_GET["server"]` and `$_GET["domain"]`) without proper sanitization or validation can lead to command injection vulnerabilities. An attacker could potentially manipulate the input to execute arbitrary commands on the server.
+
+2. **Security Issue: Insufficient Input Validation**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     <input type="hidden" name="server" value="whois.publicinterestregistry.net">
+     ```
+   - **Description**: Although the `server` parameter is hidden and has a preset value in the HTML form, it can still be modified by an attacker before submission. This can be used in conjunction with the command injection vulnerability mentioned above.
+
+3. **Code Style Issue: Inconsistent Indentation and Spacing**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description**: The PHP opening tag and the `include` statement have inconsistent spacing. Proper and consistent indentation and spacing improve code readability and maintainability.
+
+4. **Logic Issue: Regex Complexity and Maintenance**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     if (preg_match('/^[-a-z0-9]+\.a[cdefgilmnoqrstuwxz]|b[abdefghijmnorstvwyz]|c[acdfghiklmnoruvxyz]|d[ejkmoz]|e[cegrstu]|f[ijkmor]|g[abdefghilmnpqrstuwy]|h[kmnrtu]|i[delmnoqrst]|j[emop]|k[eghimnprwyz]|l[abcikrstuvy]|m[acdeghklmnopqrstuvwxyz]|n[acefgilopruz]|om|p[aefghklmnrstwy]|qa|r[eosuw]|s[abcdeghijklmnortuvyz]|t[cdfghjklmnoprtvwz]|u[agksyz]|v[aceginu]|w[fs]|y[et]|z[amw]|biz|cat|com|edu|gov|int|mil|net|org|pro|tel|aero|arpa|asia|coop|info|jobs|mobi|name|museum|travel|arpa|xn--[a-z0-9]+$/', strtolower($_GET["domain"]))
+     ```
+   - **Description**: The regular expression used for validating domain names is overly complex and hard to maintain. It might also not cover all valid domain names or TLDs, especially with new TLDs becoming available. A more maintainable approach could involve using a dedicated library for domain validation.
+
+Recommendations:
+- Sanitize and validate all user inputs, especially those used in system commands.
+- Use more secure methods for executing system commands, such as escapeshellarg() or escapeshellcmd().
+- Consider using a more robust method for domain validation, possibly leveraging existing libraries.
+- Improve code formatting for better readability and maintainability.

@@ -1,0 +1,8 @@
+1. **Issue Description**: The code directly assigns `event.data` to the innerHTML of an element. This can lead to Cross-Site Scripting (XSS) vulnerabilities if the data from `event` is not properly sanitized and contains malicious scripts.
+
+2. **Severity Level**: High
+
+3. **Line Number and Content**:
+   - Line 5: `document.getElementById("message").innerHTML = event.data;`
+
+To mitigate this issue, consider sanitizing the data or using `textContent` instead of `innerHTML` if the intention is to display text. This prevents the execution of any embedded HTML or JavaScript.

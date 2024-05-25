@@ -1,0 +1,36 @@
+1. **Issue: Use of `eval` Function**
+   - **Description**: The use of `eval` for evaluating expressions directly from user input can lead to security vulnerabilities such as code injection. An attacker could potentially execute arbitrary code by passing specially crafted input.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```ruby
+     print eval(first_number+"+"+second_number)
+     ```
+
+2. **Issue: Commented Conversion to Integer**
+   - **Description**: The conversion of input arguments to integers is commented out. This could lead to unexpected behavior or errors during arithmetic operations if the inputs are not valid integers.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```ruby
+     first_number  = ARGV[0]#.to_i
+     second_number = ARGV[1]#.to_i
+     ```
+
+3. **Issue: Lack of Input Validation**
+   - **Description**: There is no validation to check if the provided arguments are numbers or if they are present at all. This can lead to runtime errors or incorrect calculations.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```ruby
+     first_number  = ARGV[0]
+     second_number = ARGV[1]
+     ```
+
+4. **Issue: Improper Output Formatting**
+   - **Description**: The output formatting is not clear as it directly concatenates the arguments with a plus sign and prints the result without any explanatory text or spacing.
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```ruby
+     print "Args:",first_number,second_number,"
+     "
+     ```
+
+To improve the security and functionality of this script, consider removing the use of `eval`, ensuring input conversion and validation, and enhancing the output formatting.

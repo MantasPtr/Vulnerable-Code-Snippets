@@ -1,0 +1,11 @@
+1. **Buffer Overflow Issue**
+   - **Description**: The `sprintf` function is used to write a string that is longer than the allocated buffer size. The string "This string is too long!" exceeds the buffer size of 10, which can lead to buffer overflow, potentially causing program crashes or vulnerabilities.
+   - **Severity Level**: High
+   - **Line Number and Content**: Line 8: `sprintf(buffer, "%s", "This string is too long!");`
+
+2. **Incorrect Function Call**
+   - **Description**: The `printf` function is incorrectly written as `printf external link`. This appears to be a typo or a syntax error, which will cause the program to fail to compile.
+   - **Severity Level**: High
+   - **Line Number and Content**: Line 10: `printf external link("check: %d", check); /* This will not print 0! */`
+
+These issues need to be addressed to ensure the program functions correctly and securely.

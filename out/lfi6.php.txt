@@ -1,0 +1,28 @@
+1. **Security Issue: Local File Inclusion (LFI)**
+   - **Severity Level**: Critical
+   - **Line Number and Content**: 
+     ```php
+     include($_POST["page"]);
+     ```
+   - **Description**: The script uses the `include` function with a parameter directly taken from user input (`$_POST["page"]`). This can lead to Local File Inclusion (LFI) vulnerabilities where an attacker could include files from the server, such as configuration files or other sensitive data, potentially leading to information disclosure or remote code execution if combined with other vulnerabilities.
+
+2. **Security Issue: Lack of Input Validation**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     include($_POST["page"]);
+     ```
+   - **Description**: There is no validation or sanitization on the user input before it is used in the `include` statement. This lack of validation contributes to the LFI vulnerability and makes the application susceptible to other types of attacks such as Cross-Site Scripting (XSS) if the input is echoed back to the user.
+
+3. **Code Style Issue: Inconsistent Indentation and Spacing**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description**: The PHP opening tag and the `include` statement have inconsistent spacing. Proper and consistent indentation and spacing improve code readability and maintainability.
+
+To mitigate these issues, especially the critical and high severity ones, it is recommended to:
+- Validate and sanitize all user inputs. For the `include` function, ensure that the input corresponds to a list of allowed files or patterns.
+- Implement a more secure method of handling file inclusions, such as using a switch-case structure that maps specific inputs to file paths, avoiding direct user control over file paths.
+- Standardize code formatting to improve readability and maintainability.

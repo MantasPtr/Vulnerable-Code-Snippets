@@ -1,0 +1,48 @@
+1. **Command Injection Vulnerability**
+   - **Severity**: High
+   - **Line**: 
+     ```javascript
+     exec(`${req.body.url}`, (error) => {
+     ```
+   - **Description**: The code directly uses user input (`req.body.url`) in the `exec` function without any sanitization or validation. This can lead to command injection attacks where an attacker could execute arbitrary commands on the server.
+
+2. **Command Injection Vulnerability**
+   - **Severity**: High
+   - **Line**: 
+     ```javascript
+     exec('gzip ' + req.query.file_path, function (err, data) {
+     ```
+   - **Description**: Similar to the first issue, this line uses user input (`req.query.file_path`) directly in the `exec` function. An attacker could manipulate the `file_path` to execute unintended commands on the server.
+
+3. **Potential Command Injection Vulnerability**
+   - **Severity**: High
+   - **Line**: 
+     ```javascript
+     const cmdRunning = spawn(cmd, []);
+     ```
+   - **Description**: The function `runMe` uses the `spawn` function with `cmd` derived from user input (`req.params.cmd`) without sanitization. Although `spawn` is generally safer than `exec` because it doesn't execute commands within a shell by default, using user input directly can still be risky, especially if not properly validated or sanitized.
+
+4. **Logging Sensitive Information**
+   - **Severity**: Medium
+   - **Line**: 
+     ```javascript
+     console.log('err: ', err)
+     console.log('data: ', data);
+     ```
+   - **Description**: Logging error and data directly can potentially log sensitive information. This could lead to information disclosure if logs are not properly secured or if sensitive data is included in the error messages or command outputs.
+
+5. **Lack of Input Validation**
+   - **Severity**: Medium
+   - **Description**: Across all endpoints, there is no validation on the inputs (`req.body.url`, `req.query.file_path`, `req.params.cmd`). This not only contributes to the command injection vulnerabilities but also can lead to other issues like malformed input handling.
+
+6. **Inconsistent Error Handling**
+   - **Severity**: Low
+   - **Line**: 
+     ```javascript
+     if (error) {
+         return res.send('error');
+     }
+     ```
+   - **Description**: The error handling is inconsistent and not informative. Returning a simple string 'error' does not provide enough context or information about what went wrong, which can hinder debugging and user experience.
+
+To address these issues, it's crucial to implement proper input validation and sanitization, especially for any parameters that will be used in system commands. Additionally, consider using more secure alternatives or patterns when dealing with external commands, and improve error handling and logging practices to ensure they are secure and informative.

@@ -1,0 +1,28 @@
+1. **Security Issue: Local File Inclusion (LFI)**
+   - **Severity Level**: Critical
+   - **Line Number and Content**: 
+     ```php
+     include("includes/".$_POST['library'].".php");
+     ```
+   - **Description**: The code directly includes a file based on user input without any validation or sanitization. This can allow an attacker to include arbitrary files from the server, potentially leading to remote code execution or disclosure of sensitive information.
+
+2. **Security Issue: Missing Input Validation**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     <input type="text" name="library">
+     ```
+   - **Description**: The form input for 'library' is directly used in the file inclusion without any checks. This poses a risk as malicious inputs can be used to exploit the server.
+
+3. **Code Style Issue: Inconsistent Indentation and Spacing**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description**: The PHP opening tag and the include statement have inconsistent spacing. Proper formatting and consistent indentation improve code readability and maintainability.
+
+To mitigate these issues, it is recommended to:
+- Sanitize and validate all user inputs, especially those that influence file paths.
+- Use a whitelist approach where only specific, predefined files can be included based on user input.
+- Improve code formatting for better readability and maintainability.

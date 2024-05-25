@@ -1,0 +1,37 @@
+1. **Security Issue: Local File Inclusion (LFI)**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     include('includes/class_'.addslashes($_POST['class']).'.php');
+     ```
+   - **Description**: The code is vulnerable to a Local File Inclusion attack. Even though `addslashes()` is used, it is not sufficient to prevent LFI as it only escapes single quotes, double quotes, backslashes, and NULL bytes. An attacker could potentially include files from the server by manipulating the `class` parameter. This could lead to unauthorized access or disclosure of sensitive information.
+
+2. **Code Style Issue: Inconsistent Indentation and Spacing**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description**: The PHP opening tag and the `include` statement have inconsistent spacing. Proper formatting and consistent spacing improve code readability and maintainability.
+
+3. **Security Issue: Missing Input Validation**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     <input type="text" name="class">
+     ```
+   - **Description**: The input for `class` is directly used in the file inclusion without any validation or sanitization. This poses a security risk as it could be exploited to include arbitrary files. It's recommended to validate and sanitize all user inputs, especially those used in file paths or include statements.
+
+4. **Security Issue: Form Missing CSRF Protection**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     ```php
+     <form action="/LFI-9/index.php" method="POST">
+     ```
+   - **Description**: The form does not implement any Cross-Site Request Forgery (CSRF) protection mechanism. Without CSRF tokens or similar protections, the form is vulnerable to CSRF attacks where malicious websites can submit requests through an authenticated user's browser.
+
+Recommendations:
+- Implement thorough input validation and sanitization for the `class` parameter.
+- Use a whitelist approach for file inclusion, where only specific, predefined files can be included based on the input.
+- Add CSRF protection to the form to prevent CSRF attacks.
+- Improve code formatting for better readability and consistency.

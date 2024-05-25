@@ -1,0 +1,28 @@
+1. **Security Issue: Local File Inclusion (LFI)**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     include("includes/".$_GET['library'].".php");
+     ```
+   - **Description**: The code directly includes a file based on user input without any validation or sanitization. This can allow an attacker to include arbitrary files from the server, potentially leading to remote code execution, information disclosure, or other security vulnerabilities.
+
+2. **Code Style Issue: Inconsistent Indentation and Spacing**
+   - **Severity Level**: Low
+   - **Line Number and Content**: 
+     ```php
+     <?php     include("../common/header.php");   ?>
+     ```
+   - **Description**: The PHP opening tag and the include statement have inconsistent spacing. Proper formatting and consistent spacing improve code readability and maintainability.
+
+3. **Security Issue: Missing Input Validation**
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```php
+     <input type="text" name="library">
+     ```
+   - **Description**: The form input 'library' is directly used in the file inclusion without any validation. This poses a significant security risk as mentioned in the first point. Validating and sanitizing the input can mitigate potential security threats.
+
+To address these issues:
+- Implement input validation for the 'library' parameter to ensure only expected values are processed.
+- Use a whitelist approach where only specific, pre-defined files can be included based on the user input.
+- Correct the code formatting to improve readability and maintain consistency across the codebase.

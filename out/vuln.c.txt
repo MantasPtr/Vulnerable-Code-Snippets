@@ -1,0 +1,46 @@
+1. **Security Issue: Use of `system()` Function**
+   - **Severity Level**: High
+   - **Line Number and Content**: Line 18: `system("date");`
+   - **Description**: The use of `system()` can lead to security vulnerabilities, especially if used with user-supplied data or in an insecure context. It can be exploited to execute arbitrary commands.
+
+2. **Security Issue: Buffer Overflow Vulnerability**
+   - **Severity Level**: High
+   - **Line Number and Content**: Line 47: `for (int i = 0; i <= MAX_SYM_LEN; i++)`
+   - **Description**: The loop iterates one time too many due to `i <= MAX_SYM_LEN`, which can lead to a buffer overflow as it writes beyond the allocated space for `stonk->symbol`.
+
+3. **Security Issue: Use of `scanf()` Without Limiting Input Size**
+   - **Severity Level**: High
+   - **Line Number and Content**: Line 84: `scanf("%300s", user_buf);`
+   - **Description**: Although `scanf()` is used with a limit here, it is generally unsafe for reading strings because it can lead to buffer overflows if not used carefully. Prefer safer alternatives like `fgets()`.
+
+4. **Security Issue: Printing Unsanitized User Input**
+   - **Severity Level**: High
+   - **Line Number and Content**: Line 88: `printf(user_buf);`
+   - **Description**: Directly printing user input without sanitization can lead to format string vulnerabilities. Use `printf("%s", user_buf);` instead.
+
+5. **Memory Leak: Not Freeing `user_buf`**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: Not explicitly shown, but related to the allocation at Line 82 and missing free operation.
+   - **Description**: The allocated memory for `user_buf` is not freed, leading to a memory leak.
+
+6. **Logical Issue: Inconsistent Memory Handling on Failure**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: Line 50: `Stonk *stonk = malloc(sizeof(Stonk));`
+   - **Description**: There is no check to ensure `malloc` succeeded in allocating memory for `stonk`. This can lead to dereferencing a NULL pointer if the allocation fails.
+
+7. **Performance Issue: Inefficient Memory Usage in `buy_stonks`**
+   - **Severity Level**: Low
+   - **Line Number and Content**: Loop structure in `buy_stonks` function.
+   - **Description**: The function repeatedly allocates memory for `Stonk` structures within a loop, which could be optimized or managed better to avoid high overhead in memory allocation and deallocation.
+
+8. **Code Style Issue: Magic Numbers**
+   - **Severity Level**: Low
+   - **Line Number and Content**: Line 75: `char *user_buf = malloc(300 + 1);`
+   - **Description**: The number `300` is a magic number. It would be better to define it as a constant at the beginning of the file, improving readability and maintainability.
+
+9. **Potential Issue: File Descriptor Leak**
+   - **Severity Level**: Medium
+   - **Line Number and Content**: Line 56: `FILE *f = fopen("api","r");`
+   - **Description**: The file opened here is not closed, which can lead to resource leaks. Always ensure to close file descriptors with `fclose(f);` after you're done with them.
+
+These issues should be addressed to ensure the code is secure, efficient, and maintainable.

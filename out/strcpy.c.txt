@@ -1,0 +1,6 @@
+1. **Buffer Overflow Issue**
+   - **Severity Level**: High
+   - **Line Number and Content**:
+     - Line 2: `char str2[]="abcdefghijklmn";`
+     - Line 3: `strcpy(str1,str2);`
+   - **Description**: The array `str1` is declared with a size of 10 characters, but `str2` contains 14 characters plus a null terminator, making it 15 characters in total. Using `strcpy` to copy `str2` into `str1` without checking the length will lead to a buffer overflow, which can cause program crashes or vulnerabilities exploitable for arbitrary code execution.

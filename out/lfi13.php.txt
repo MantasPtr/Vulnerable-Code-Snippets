@@ -1,0 +1,30 @@
+1. **Issue: Local File Inclusion (LFI) Vulnerability**
+   - **Description**: The script is vulnerable to local file inclusion due to the dynamic inclusion of files based on user input. Although there is an attempt to sanitize the input by removing '../', this is insufficient to prevent exploitation. An attacker could still use other methods to traverse directories or use other bypass techniques.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 11: `$file = str_replace('../', '', $_GET['file']);`
+     - Line 13: `include("pages/$file");`
+
+2. **Issue: Lack of Input Validation**
+   - **Description**: The script does not validate or sufficiently sanitize the user input before using it in the `include` statement. This can lead to including arbitrary files that are present on the server.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 13: `include("pages/$file");`
+
+3. **Issue: Uninitialized Variable Usage**
+   - **Description**: The script checks if `$file` is set after it has already been used in the `include` statement. This check should occur before the variable is used to ensure that it is initialized and valid.
+   - **Severity Level**: Medium
+   - **Line Number and Content**: 
+     - Line 13: `include("pages/$file");`
+     - Line 14: `if(isset($file))`
+
+4. **Issue: Potential Exposure of Sensitive Files**
+   - **Description**: If an attacker manages to bypass the simple '../' replacement, they could potentially access sensitive files on the server by including configuration files or logs.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     - Line 13: `include("pages/$file");`
+
+**Recommendations**:
+- Use a whitelist of allowed files to include, rather than accepting any input from the user.
+- Properly validate and sanitize all user inputs.
+- Ensure that the variable is set and valid before using it in operations like file inclusion.

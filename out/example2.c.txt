@@ -1,0 +1,28 @@
+1. **Issue: Use of Unsafe Function `scanf`**
+   - **Description**: The function `scanf` is used to read input into the `name` buffer without limiting the number of characters read. This can lead to buffer overflow if the input exceeds 63 characters (plus null terminator).
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```c
+     scanf("%s", name);
+     ```
+
+2. **Issue: Undefined Function `Sanitize`**
+   - **Description**: The function `Sanitize` is called but not defined anywhere in the provided code snippet. This will lead to a linker error unless the function is defined elsewhere.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```c
+     Sanitize(name);
+     ```
+
+3. **Issue: Potential Buffer Overflow in `printf`**
+   - **Description**: The `printf` function is used to print the `name` buffer without any checks on the content that might have been modified or corrupted after the `Sanitize` function. This could potentially lead to format string vulnerabilities or buffer overflow issues if `name` contains format specifiers or is excessively long.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```c
+     printf("Welcome, %s!", name);
+     ```
+
+**Recommendations**:
+- Replace `scanf("%s", name)` with `fgets(name, sizeof(name), stdin)` to safely read input with a limit.
+- Ensure the `Sanitize` function is properly defined and safely handles the input.
+- Use `printf("Welcome, %s!", name)` cautiously, ensuring that `name` does not contain unexpected format specifiers. Consider using `printf("Welcome, "); printf("%s!", name);` to avoid format string vulnerabilities.

@@ -1,0 +1,37 @@
+1. **Issue: Open Redirect Vulnerability**
+   - **Description**: The code in the `/login` route directly appends user input (`followPath`) to a redirect URL without proper validation. This can lead to open redirect vulnerabilities where an attacker could redirect a user to a malicious site.
+   - **Severity Level**: High
+   - **Line Number and Content**: 
+     ```javascript
+     res.redirect('http://example.com/'+followPath); // Line 7
+     ```
+
+2. **Issue: Incomplete URL Encoding**
+   - **Description**: In the `/goto` route, the URL is encoded using `encodeURI`, which does not encode characters such as `@`, `:`, `&`, `=`, `+`, `$`, `,`, `/`, `?`, `#`, `[`, `]`, which can still lead to security vulnerabilities. It's safer to use `encodeURIComponent` for query parameters or parts of the URL.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```javascript
+     let url = encodeURI(req.query.url); // Line 13
+     ```
+
+3. **Issue: Lack of Input Validation**
+   - **Description**: There is no validation on the `path` and `url` query parameters in both `/login` and `/goto` routes. This can lead to various security issues including the aforementioned open redirect vulnerabilities.
+   - **Severity Level**: Medium
+   - **Line Number and Content**:
+     ```javascript
+     let followPath = req.query.path; // Line 5
+     let url = encodeURI(req.query.url); // Line 13
+     ```
+
+4. **Issue: Use of Console for Logging**
+   - **Description**: The use of `console.log` for logging is found in the code. For production environments, it's recommended to use a more robust logging framework that can handle different levels of logging and manage log outputs more effectively.
+   - **Severity Level**: Low
+   - **Line Number and Content**:
+     ```javascript
+     console.log('WIP') // Line 1
+     ```
+
+Recommendations:
+- Validate and sanitize all user inputs especially those that are used in critical operations like redirects.
+- Replace `encodeURI` with `encodeURIComponent` where appropriate.
+- Consider implementing a more robust logging mechanism for production environments.

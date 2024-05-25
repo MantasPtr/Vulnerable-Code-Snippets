@@ -1,0 +1,15 @@
+1. **Description of the issue**: The method `DoXxe` is vulnerable to XML External Entity (XXE) attacks. By default, `XmlDocument` does not disable DTD processing, which means that if the XML input includes a DOCTYPE declaration with an external entity, it can lead to information disclosure, denial of service, server side request forgery, and other system impacts.
+
+2. **Severity level**: High
+
+3. **Line number and content**:
+   - Line 14: `xmlDoc.LoadXml(xmlString);`
+
+To mitigate this issue, you should disable DTD processing in the `XmlDocument` object before loading the XML content. Here is how you can adjust the code:
+
+```csharp
+xmlDoc.XmlResolver = null; // Disables external document type definitions
+xmlDoc.LoadXml(xmlString);
+```
+
+Adding this line before loading the XML will help prevent XXE attacks.
